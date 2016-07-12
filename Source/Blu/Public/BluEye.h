@@ -59,8 +59,8 @@ public:
 	//GENERATED_UCLASS_BODY()
 
 	/** Initialize function, should be called after properties are set */
-	UFUNCTION(BlueprintCallable, Category = "Blu")
-		void init();
+	UFUNCTION(BlueprintCallable, Category = "Blu", meta = (WorldContext = "WorldContextObject"))
+		void init(UObject* WorldContextObject);
 
 	/** The default URL this UI component will load */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blu")
@@ -82,6 +82,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blu")
 		int32 Height;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blu")
+		bool bEnableWebGL;
+
 	/** Material that will be instanced to load UI texture into it */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blu")
 		UMaterialInterface* BaseMaterial;
@@ -90,17 +93,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blu")
 		FName TextureParameterName = "BluTexture";
 
+	UFUNCTION(BlueprintCallable, Category = "Blu")
+		UBluEye* SetProperties(const int32 SetWidth,
+							const int32 SetHeight,
+							const bool SetIsTransparent,
+							const bool SetEnabled,
+							const bool SetWebGL,
+							const FString& SetDefaultURL,
+							const FName& SetTextureParameterName,
+							UMaterialInterface* SetBaseMaterial);
+
 	/** Get the texture data from our UI component */
 	UFUNCTION(BlueprintCallable, Category = "Blu")
 		UTexture2D* GetTexture() const;
-
-	/** 
-	* Material instance that contains texture inside it 
-	* @deprecated Please use raw texture using GetTexture method. GetMaterialInstance will be removed in the next release! 
-	*/
-	DEPRECATED(4.8, "Please use raw texture using GetTexture method. GetMaterialInstance will be removed in the next release!")
-	UFUNCTION(BlueprintCallable, Category = "Blu", meta = (DeprecatedFunction, DeprecatedNode, DeprecationMessage = "Please use raw texture using GetTexture method. GetMaterialInstance will be removed in the next release!"))
-		UMaterialInstanceDynamic* GetMaterialInstance() const;
 
 	/** Execute JS code inside the browser */
 	UFUNCTION(BlueprintCallable, Category = "Blu")
